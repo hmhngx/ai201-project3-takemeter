@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+venv/
+.venv/
+
+# HuggingFace cache
+*.cache/
+
+# Temporary scripts (not project artifacts)
+collect_data.py
+review_samples.py
+verify_dataset.py
