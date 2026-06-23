@@ -1,0 +1,28 @@
+{
+  "model": "llama-3.3-70b-versatile (zero-shot)",
+  "test_set_size": 38,
+  "accuracy": 0.605,
+  "macro_f1": 0.46,
+  "per_class": {
+    "NTA": {
+      "precision": 0.56,
+      "recall": 0.93,
+      "f1-score": 0.7,
+      "support": 15
+    },
+    "YTA": {
+      "precision": 0.69,
+      "recall": 0.64,
+      "f1-score": 0.67,
+      "support": 14
+    },
+    "ESH": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 9
+    }
+  },
+  "parse_failures": 0,
+  "note": "Model never predicted ESH \u2014 treats task as binary NTA/YTA"
+}
