@@ -101,6 +101,36 @@ Manually reviewed 30 examples (10 per class) to verify community flair matches p
 - YTA examples: clean; all 10 showed clear cases of the poster causing disproportionate harm or acting unreasonably
 - ESH examples: 2 of 10 felt borderline ESH/NTA; retained the community flair as ground truth per the annotation protocol (community vote is the label, not personal judgment)
 
+### Difficult Annotation Cases
+
+**Case 1 — ESH vs. NTA (community verdict: ESH)**
+
+A poster who was bullied for years by a classmate made fun of the bully's large nose in retaliation. The bully was Jewish and accused the poster of antisemitism. The poster later apologized — but the apology was backhanded: "I didn't know he was a Jew and I wouldn't have joked about his nose if he hadn't spent years calling me slurs."
+
+*Ambiguous between:* ESH and NTA. The bully had genuinely mistreated the poster for years, making NTA feel sympathetic.
+
+*Decision: ESH.* The decision rule says: if the poster's response was proportionate and was a first-time response → NTA. Here, the response was a physical-appearance joke that carries ethnic weight regardless of intent, and the backhanded apology revealed conditional judgment ("I wouldn't have done it *if* he hadn't been..."). That tips it from NTA to ESH: the poster's response created a separate harm. Both parties behaved poorly in this incident.
+
+---
+
+**Case 2 — YTA vs. NTA (community verdict: YTA)**
+
+A poster had held off introducing her boyfriend to her belittling father. When they finally met, the boyfriend defended the poster against her father's put-downs. The poster now wants to ask the boyfriend to apologize to her father to keep family peace.
+
+*Ambiguous between:* YTA and NTA. The poster knows her family dynamic intimately and may have legitimate reasons to manage conflict carefully.
+
+*Decision: YTA.* Asking someone who defended you to apologize to the person who was attacking you validates the attacker and punishes the defender. The poster's discomfort with conflict doesn't justify this. The action directly harms the boyfriend for doing something good — that trips the decision rule: the poster's proposed action constitutes an unjustified harm to the defender, regardless of the family management rationale.
+
+---
+
+**Case 3 — ESH vs. NTA (community verdict: ESH)**
+
+A poster in a master's biology class group project has been carrying the team. Other members have been contributing poorly or not at all. The poster wants to stop doing any further work for the group as a protest.
+
+*Ambiguous between:* ESH and NTA. If the poster genuinely tried to resolve the imbalance and was ignored, a unilateral work stoppage looks like NTA (forced action against an unresponsive situation).
+
+*Decision: ESH.* The post doesn't mention prior escalation to the professor or a direct group conversation — and the absence of that context is load-bearing. Without attempting resolution first, withdrawing labor entirely harms the project and potentially innocent group members. If escalation had been tried and failed, the verdict might be NTA. The missing context makes it ESH: both the teammates' poor contribution and the poster's unilateral stoppage (without escalation) are harmful choices.
+
 ---
 
 ## 4. Model
@@ -109,7 +139,26 @@ Manually reviewed 30 examples (10 per class) to verify community flair matches p
 
 **Model:** `llama-3.3-70b-versatile` via Groq API, zero-shot
 
-**Prompt strategy:** System instruction defining all three labels precisely + one-shot format instruction. Model asked to respond with **exactly one word**: NTA, YTA, or ESH. No examples provided (true zero-shot).
+**Prompt strategy:** System instruction defining all three labels precisely, with no task examples (true zero-shot). The model was instructed to respond with exactly one word.
+
+**System prompt used:**
+```
+You are an expert at classifying Reddit r/AmItheAsshole (AITA) posts.
+
+The three possible verdicts are:
+- NTA (Not the Asshole): The poster's behavior was justified; the conflict was
+  initiated or primarily caused by the other party, and the poster's response
+  was proportionate.
+- YTA (You're the Asshole): The poster caused unjustified harm or acted
+  unreasonably; the poster's action either initiated the conflict or was a
+  disproportionate escalation.
+- ESH (Everyone Sucks Here): Both the poster AND the other party behaved poorly
+  in the same incident; there is no clear moral winner.
+
+Respond with EXACTLY ONE WORD — either NTA, YTA, or ESH. Nothing else.
+```
+
+**How results were collected:** Each of the 38 test-set posts was passed to the Groq API individually as the user message, with the system prompt above. The model's raw response was stripped and uppercased before comparison against the label set. Parse failures (responses that weren't exactly NTA, YTA, or ESH) were counted separately; the run reported in `baseline_results.json` had 0 parse failures.
 
 **Why this baseline:** A large language model with broad internet knowledge will have strong priors about moral reasoning and AITA community norms. Any fine-tuned model that can't outperform zero-shot Llama 70B has not learned community-specific signal that generalizes.
 
